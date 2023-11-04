@@ -8,15 +8,15 @@ let modInfo = {
 	changelogLink: "https://github.com/Jacorb90/Prestige-Tree/blob/master/changelog.md",
     offlineLimit: 1,  // In hours
     initialStartPoints: new Decimal(10), // Used for hard resets and new players
-	endgame: new Decimal("e268000"),
-	specialEndgameText: "v0.1 Endgame: e268000 points ( M&Ba unlocked )",
+	endgame: new Decimal("e38000000"),
+	specialEndgameText: "v0.2 Endgame: e38000000 points ( Honour unlocked )",
 }
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.1",
-	patch: 1,
-	name: "Rebalanced",
+	num: "0.2",
+	patch: 2,
+	name: "NObalanced",
 }
 
 // If you add new functions anywhere inside of a layer, and those functions have an effect when called, add them here.

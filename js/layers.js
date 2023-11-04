@@ -1396,7 +1396,7 @@ addLayer("e", {
 			},
 			14: {
 				title: "More Additions",
-				description: "Any B/G Upgrades that add to the B/G base *4(except <b>Up to the 100the floor</boosters>).",
+				description: "Any B/G Upgrades that add to the B/G base *4(except <b>Up to the 100th floor</b>).",
 				cost() { return new Decimal(((Array.isArray(tmp.ma.mastered))?tmp.ma.mastered.includes(this.layer):false)?"e1.01e5":1e60) },
 				unlocked() { return hasAchievement("a", 33) },
 				effect() {
@@ -2729,7 +2729,7 @@ addLayer("h", {
 			if (!unl(this.layer)) return new Decimal(1);
 			let h = player.h.points.times(player.points.plus(1).log("1e1000").plus(1));
 			h = softcap("hindr_base", h);
-			let eff = h.plus(1).pow(3).pow(hasChallenge("h", 11)?1.2:1).pow(hasUpgrade("ba", 21)?8:1);
+			let eff = h.plus(1).pow(3).pow(hasChallenge("h", 11)?1.2:1).pow(hasUpgrade("ba", 21)?18:1);
 			if (hasUpgrade("q", 45) && player.i.buyables[12].gte(6)) eff = eff.pow(100);
 			return eff;
 		},
@@ -2827,7 +2827,7 @@ addLayer("h", {
 				completionLimit: 1,
 				challengeDescription: "Prestige Upgrades, Achievement rewards, & the Primary Space Building are the only things that boost Point generation.",
 				unlocked() { return hasChallenge("h", 21) },
-				goal() { return new Decimal(player.ma.current=="h"?"e8.225e6":"1e4000") },
+				goal() { return new Decimal(player.ma.current=="h"?"e8.225e6":"1e3600") },
 				currencyDisplayName: "points",
 				currencyInternalName: "points",
 				rewardDescription: "<b>Prestige Boost</b>'s hardcap is now a softcap.",
@@ -2897,11 +2897,11 @@ addLayer("h", {
 					let comps = Decimal.mul(challengeCompletions("h", 32), tmp.h.challenges[this.id].scalePower);
 					if (comps.gte(3)) comps = comps.sub(0.96);
 					if (comps.gte(3.04)) comps = comps.times(1.425);
-					return Decimal.pow("1e1000", Decimal.pow(comps, 3)).times("1e9000");
+					return Decimal.pow("1e1000", Decimal.pow(comps, 3)).times("1e12800");
 				},
 				completeInBulk() {
 					if (challengeCompletions("h", 32)>=tmp[this.layer].challenges[this.id].completionLimit) return;
-					let target = player.points.div("1e9000").max(1).log("1e1000").cbrt();
+					let target = player.points.div("1e12800").max(1).log("1e1000").cbrt();
 					if (target.gte(3.04)) target = target.div(1.425);
 					if (target.gte(3)) target = target.plus(.96);
 					target = target.div(tmp.h.challenges[this.id].scalePower).plus(1).floor();
@@ -2935,7 +2935,7 @@ addLayer("h", {
 				name: "Central Madness",
 				completionLimit: 1,
 				challengeDescription: "Perform a Row 5 reset, Positivity & Negativity are reset, and Positivity & Negativity nerfs are extremely stronger.",
-				goal: new Decimal("1e765000"),
+				goal: new Decimal("1e6666666"),
 				currencyDisplayName: "points",
 				currencyInternalName: "points",
 				rewardDescription: "Unlock 3 new Balance Upgrades.",
@@ -2956,7 +2956,7 @@ addLayer("h", {
 				name: "Productionless",
 				completionLimit: 1,
 				challengeDescription: "Perform a Row 5 reset, you are trapped in <b>Descension</b>, and all row 2-4 static layers have much harsher cost scalings.",
-				goal: new Decimal("1e19000"),
+				goal: new Decimal("1e27000"),
 				currencyDisplayName: "points",
 				currencyInternalName: "points",
 				rewardDescription() { return "The Quirk Layer cost base is decreased by 0."+(((Array.isArray(tmp.ma.mastered))?tmp.ma.mastered.includes("h"):false)?"2":"15")+", and unlock 2 new Subspace Upgrades." },
@@ -3664,10 +3664,10 @@ addLayer("o", {
 		update(diff) {
 			player.o.energy = player.o.energy.plus(tmp.o.solEnGain.times(diff));
 			if (hasMilestone("m", 0) && player.ma.current!="o") {
-				for (let i in tmp.o.buyables) if (i!="rows" && i!="cols") if (tmp.o.buyables[i].unlocked) player.o.buyables[i] = player.o.buyables[i].plus(tmp.o.buyables[i].gain.times(diff));
+				for (let i in tmp.o.buyables) if (i!="rows" && i!="cols") if (tmp.o.buyables[i].unlocked) player.o.buyables[i] = player.o.buyables[i].plus(tmp.o.buyables[i].gain.times(diff).times(5));
 			}
 		},
-		passiveGeneration() { return player.ma.current=="o"?0:(hasMilestone("m", 0)?1:(hasMilestone("o", 0)?0.5:0)) },
+		passiveGeneration() { return player.ma.current=="o"?0:(hasMilestone("m", 0)?5:(hasMilestone("o", 0)?0.5:0)) },
 		solPow() {
 			let pow = new Decimal(1);
 			if (hasUpgrade("ss", 33)) pow = pow.plus(upgradeEffect("ss", 33));
@@ -4162,7 +4162,7 @@ addLayer("ss", {
 			42: {
 				title: "Sub-Subspace",
 				description: "Space Buildings are 100% stronger (additive).",
-				cost() { return new Decimal((player.ma.current=="ss")?"1e17799":"1e936") },
+				cost() { return new Decimal((player.ma.current=="ss")?"1e17799":"1e2850") },
 				currencyDisplayName: "subspace",
 				currencyInternalName: "subspace",
 				currencyLayer: "ss",
@@ -4172,7 +4172,7 @@ addLayer("ss", {
 				title: "Challenging Speedup",
 				endpoint() { return new Decimal(((Array.isArray(tmp.ma.mastered))?tmp.ma.mastered.includes(this.layer):false)?"e1e11":"e1e6") },
 				description() { return "When below "+format(tmp.ss.upgrades[43].endpoint)+", Point gain is raised to the power of 1.1. Otherwise, it is raised to the power of 1.01." },
-				cost() { return new Decimal((player.ma.current=="ss")?"1e17800":"1e990") },
+				cost() { return new Decimal((player.ma.current=="ss")?"1e17800":"1e3000") },
 				currencyDisplayName: "subspace",
 				currencyInternalName: "subspace",
 				currencyLayer: "ss",
@@ -4214,7 +4214,7 @@ addLayer("m", {
 			first: 0,
         }},
         color: "#eb34c0",
-        requires: new Decimal(1e410), // Can be a function that takes requirement increases into account
+        requires: new Decimal('1e410'), // Can be a function that takes requirement increases into account
         resource: "magic", // Name of prestige currency
         baseResource: "hindrance spirit", // Name of resource prestige is based on
         baseAmount() {return player.h.points}, // Get the current amount of baseResource
@@ -4534,7 +4534,7 @@ addLayer("m", {
 			0: {
 				requirementDescription: "1 Total Magic",
 				done() { return player.m.total.gte(1) || (hasMilestone("hn", 0)) },
-				effectDescription: "Automatically gain 100% of Solarity gain & Solarity buyables every second.",
+				effectDescription: "Automatically gain 500% of Solarity gain & Solarity buyables every second.",
 			},
 			1: {
 				requirementDescription: "2 Total Magic",
@@ -4564,7 +4564,7 @@ addLayer("m", {
 				toggles: [["m", "distrAll"]],
 			},
 		},
-})
+})//m
 
 addLayer("ba", {
 		name: "balance", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -4582,7 +4582,7 @@ addLayer("ba", {
 			first: 0,
         }},
         color: "#fced9f",
-        requires: new Decimal(1e460), // Can be a function that takes requirement increases into account
+        requires: new Decimal('1e460'), // Can be a function that takes requirement increases into account
         resource: "balance energy", // Name of prestige currency
         baseResource: "quirks", // Name of resource prestige is based on
         baseAmount() {return player.q.points}, // Get the current amount of baseResource
@@ -4726,13 +4726,13 @@ addLayer("ba", {
 			11: {
 				title: "Negative Ion",
 				description: "Negativity boosts Solar Power.",
-				cost() { return new Decimal(player.ma.current=="ba"?"1e166666":5e7) },
+				cost() { return new Decimal(player.ma.current=="ba"?"1e166666":1e8) },
 				currencyDisplayName: "negativity",
 				currencyInternalName: "neg",
 				currencyLayer: "ba",
 				unlocked() { return hasMilestone("ba", 3) },
 				effect() { 
-					let ret = player.ba.neg.plus(1).log10().sqrt().div(10);
+					let ret = player.ba.neg.plus(1).log10().sqrt().div(5);
 					ret = softcap("ba11", ret);
 					return ret;
 				},
@@ -4742,7 +4742,7 @@ addLayer("ba", {
 			12: {
 				title: "Positive Ion",
 				description: "Positivity boosts Space Building Power & all Subspace effects.",
-				cost() { return new Decimal(player.ma.current=="ba"?"1e166666":5e7) },
+				cost() { return new Decimal(player.ma.current=="ba"?"1e166666":1e8) },
 				currencyDisplayName: "positivity",
 				currencyInternalName: "pos",
 				currencyLayer: "ba",
@@ -4770,8 +4770,8 @@ addLayer("ba", {
 				unlocked() { return hasMilestone("ba", 3) },
 			},
 			21: {
-				title: "Neutral Atom",
-				description: "The Hindrance Spirit effect is raised to the power of 8.",
+				title: "Neutral Explosion",
+				description: "The Hindrance Spirit effect is raised to the power of 18.",
 				cost() { return new Decimal(player.ma.current=="ba"?"1e189500":25e7) },
 				unlocked() { return hasUpgrade("ba", 13)&&hasUpgrade("ba", 14) },
 			},
@@ -4816,7 +4816,7 @@ addLayer("ba", {
 			31: {
 				title: "Tangible Degeneration",
 				description: "The first two Spells use better formulas.",
-				cost() { return new Decimal(player.ma.current=="ba"?"1e205500":1e52) },
+				cost() { return new Decimal(player.ma.current=="ba"?"1e205500":1e150) },
 				currencyDisplayName: "negativity",
 				currencyInternalName: "neg",
 				currencyLayer: "ba",
@@ -4825,7 +4825,7 @@ addLayer("ba", {
 			32: {
 				title: "Visible Regeneration",
 				description: "Positivity multiplies the Super-Generator base.",
-				cost() { return new Decimal(player.ma.current=="ba"?"1e205500":1e52) },
+				cost() { return new Decimal(player.ma.current=="ba"?"1e205500":1e150) },
 				currencyDisplayName: "positivity",
 				currencyInternalName: "pos",
 				currencyLayer: "ba",
@@ -4843,7 +4843,7 @@ addLayer("ba", {
 			33: {
 				title: "True Equality",
 				description: "Both <b>Net Neutrality</b> effects are cubed.",
-				cost() { return new Decimal(player.ma.current=="ba"?"1e207500":2.5e51) },
+				cost() { return new Decimal(player.ma.current=="ba"?"1e207500":2.56e256) },
 				unlocked() { return hasChallenge("h", 41) },
 			},
 		},
@@ -4879,7 +4879,7 @@ addLayer("ba", {
 				toggles: [["ba", "keepPosNeg"]],
 			},
 		},
-})
+})//ba
 
 addLayer("ps", {
 		name: "phantom souls", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -4898,7 +4898,7 @@ addLayer("ps", {
 			first: 0,
         }},
         color: "#b38fbf",
-        requires() { return new Decimal("1e16000") }, // Can be a function that takes requirement increases into account
+        requires() { return new Decimal("1e60000") }, // Can be a function that takes requirement increases into account
         resource: "phantom souls", // Name of prestige currency
         baseResource: "quirk energy", // Name of resource prestige is based on
         baseAmount() {return player.q.energy}, // Get the current amount of baseResource
@@ -5199,7 +5199,7 @@ addLayer("ps", {
 				style: {height: "150px", width: "150px"},
 			},
 		},
-})
+})//ps
 
 addLayer("hn", {
 		name: "honour", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -5220,7 +5220,7 @@ addLayer("hn", {
         type: "custom", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
 		baseResource: "magic and balance energy",
 		baseAmount() { return new Decimal(0) },
-		req: {m: new Decimal(1e150), ba: new Decimal(1e179)},
+		req: {m: new Decimal(1e300), ba: new Decimal(1e340)},
 		requires() { return this.req },
 		exp() { return {m: new Decimal(0.025), ba: new Decimal(((Array.isArray(tmp.ma.mastered))?tmp.ma.mastered.includes(this.layer):false)?0.05:0.02)} },
 		exponent() { return tmp[this.layer].exp },
@@ -9412,7 +9412,7 @@ addLayer("a", {
 				image: "images/achs/73.png",
 			},
 			74: {
-				name: "Super Balanced",
+				name: "NO Balance Here",
 				done() { return player.ba.points.gte(1e100) },
 				tooltip: 'Reach 1e100 Balance Energy. Reward: You can complete "Timeless" 10 more times, and the "Option D" effect also affects Magic & Balance Energy gain.',
 				image: "images/achs/74.png",
